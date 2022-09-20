@@ -127,10 +127,10 @@ function addDepartment() {
         }
       }
     ])
-    .then(({ deparartmentName }) => {
+    .then(({ departmentName }) => {
       const sql = `INSERT INTO departments (name)
       VALUES (?)`;
-      const params = [deparartmentName];
+      const params = [departmentName];
       db.query(sql, params, (err, result) => {
         console.log('New Department was added to the database!');
         initializeProgram();
@@ -138,9 +138,48 @@ function addDepartment() {
     })
 };
 
-// function updateEmployeeRole()
+// Update Employees Role
+function updateEmployeeRole() {
+  const sql = `SELECT employees.*, roles.id
+  AS role,
+  roles.title AS role_title
+  FROM employees
+  LEFT JOIN roles ON employees.role = roles.id`;
 
-
-
+  db.query(sql, (err, rows) => {
+    let employeeList = rows.map(function (row) {
+      return { name: row.first_name + ' ' + row.last_name, value: row.id }
+    })
+    const sql2 = `SELECT id, title FROM roles`;
+    db.query(sql2, (err, rows) => {
+      let roles = rows.map(function (row) {
+        return { name: row.title, value: row.id }
+      })
+      inquirer
+        .prompt([
+          {
+            type: 'list',
+            name: 'selectEmployee',
+            message: 'Select the employee whose profile you would like to update',
+            choices: employeeList
+          },
+          {
+            type: 'list',
+            name: 'selectNewRole',
+            message: 'Select the new role for this employee',
+            choices: roles
+          }
+        ])
+        .then(({ selectEmployee, selectNewRole }) => {
+          const sql = `UPDATE employees SET role = ? WHERE id = ?`
+          const params = [selectNewRole, selectEmployee];
+          db.query(sql, params, (err, result) => {
+            console.log('Employee Profile Updated');
+            initializeProgram();
+          })
+        })
+    })
+  })
+};
 
 module.exports = showResults;

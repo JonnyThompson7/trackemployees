@@ -4,6 +4,7 @@ const db = require('./db/connection');
 const cTable = require('console.table');
 let showResults = require('./logic');
 
+// Start Program
 initializeProgram = function () {
   inquirer
     .prompt([
