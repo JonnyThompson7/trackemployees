@@ -58,8 +58,79 @@ function allDepartments() {
   })
 };
 
-// function addRole()
-// function addDepartment()
+function addRole() {
+  const sql2 = `SELECT id, name FROM departments`;
+  db.query(sql2, (err, rows) => {
+    let departments = rows.map(function (row) {
+      return { name: row.name, value: row.id }
+    })
+    inquirer
+      .prompt([
+        {
+          type: 'text',
+          name: 'roleName',
+          message: 'What is the name of the role?',
+          validate: input => {
+            if (input) {
+              return true;
+            } else {
+              console.log('You must enter a name for the role!');
+              return false;
+            }
+          }
+        },
+        {
+          type: 'list',
+          name: 'salary',
+          message: 'Choose a salary this role is offered',
+          choices: [35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000, 95000, 100000, 110000, 125000, 150000, 200000, 250000]
+        },
+        {
+          type: 'list',
+          name: 'departmentSelection',
+          message: 'Which department is this role apart of?',
+          choices: departments
+        }
+      ])
+      .then(({ roleName, salary, departmentSelection }) => {
+        const sql = `INSERT INTO roles (title, salary, department)
+      VALUES (?,?,?)`;
+        const params = [roleName, salary, departmentSelection];
+        db.query(sql, params, (err, result) => {
+          console.log('Role was added to database!');
+          initializeProgram();
+        })
+      })
+  })
+};
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        type: 'text',
+        name: 'departmentName',
+        message: 'What is the name of the Department?',
+        validate: input => {
+          if (input) {
+            return true;
+          } else {
+            console.log('You must enter a name for the role!');
+            return false;
+          }
+        }
+      }
+    ])
+    .then(({ deparartmentName }) => {
+      const sql = `INSERT INTO departments (name)
+      VALUES (?)`;
+      const params = [deparartmentName];
+      db.query(sql, params, (err, result) => {
+        console.log('New Department was added to the database!');
+        initializeProgram();
+      })
+    })
+};
+
 // function updateEmployeeRole()
 
 
