@@ -12,7 +12,7 @@ initializeProgram = function () {
         type: 'list',
         name: 'directory',
         message: 'Welcome to Anime INC. Please choose an option from the menu',
-        choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Update Employee Role']
+        choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add Employee', 'Add Department', 'Add Role', 'Update Employee Role']
       }
     ])
     .then(({ directory }) => {
