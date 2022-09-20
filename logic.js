@@ -4,6 +4,7 @@ const db = require('./db/connection');
 const cTable = require('console.table');
 const { rawListeners } = require('process');
 
+// Function that takes you to chosen directory
 function showResults(directory) {
   if (directory === 'View All Employees') {
     allEmployees(directory);
@@ -20,6 +21,7 @@ function showResults(directory) {
   }
 };
 
+// View All Employees
 function allEmployees() {
   const sql = `SELECT employees.id AS id,
   employees.first_name AS first_name,
@@ -36,6 +38,7 @@ function allEmployees() {
   })
 };
 
+// View All Roles
 function allRoles() {
   const sql = `SELECT roles.*, departments.name
   AS department
@@ -49,6 +52,7 @@ function allRoles() {
   })
 };
 
+// View All Departments
 function allDepartments() {
   const sql = `SELECT * FROM departments`;
   db.query(sql, (err, rows) => {
@@ -58,6 +62,7 @@ function allDepartments() {
   })
 };
 
+// Add a new Role
 function addRole() {
   const sql2 = `SELECT id, name FROM departments`;
   db.query(sql2, (err, rows) => {
@@ -103,6 +108,8 @@ function addRole() {
       })
   })
 };
+
+// Add a new Department
 function addDepartment() {
   inquirer
     .prompt([
